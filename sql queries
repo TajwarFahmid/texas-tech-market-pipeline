@@ -1,0 +1,51 @@
+-- creating table
+CREATE TABLE raw_jobs (
+    job_title TEXT,
+    company TEXT,
+    location TEXT,
+    category TEXT,
+    level TEXT,
+    date_posted TEXT
+);
+
+-- creating the salary table
+CREATE TABLE salary_benchmarks (
+    category TEXT,
+    seniority_level TEXT,
+    avg_annual_salary INT
+);
+
+-- imputaing salary data into the salary table
+INSERT INTO salary_benchmarks (category, seniority_level, avg_annual_salary) VALUES
+('Data and Analytics', 'Junior/Entry', 75000),
+('Data and Analytics', 'Mid-Level', 105000),
+('Data and Analytics', 'Senior', 145000),
+('Software Engineering', 'Junior/Entry', 85000),
+('Software Engineering', 'Mid-Level', 120000),
+('Software Engineering', 'Senior', 165000),
+('Data and Analytics', 'Internship', 55000),
+('Software Engineering', 'Internship', 60000);
+
+-- data cleaning
+CREATE OR REPLACE VIEW v_cleaned_texas_jobs AS
+SELECT 
+    
+    INITCAP(REPLACE(REPLACE(job_title, '(USA)', ''), '-', '')) AS display_title,
+    company,
+    location,
+    category,
+    
+    CASE 
+        WHEN level IN ('Senior Level', 'Management') OR job_title ILIKE '%Senior%' OR job_title ILIKE '%Lead%' THEN 'Senior'
+        WHEN level = 'Entry Level' OR job_title ILIKE '%Junior%' OR job_title ILIKE '%Entry%' THEN 'Junior/Entry'
+        WHEN level = 'Internship' THEN 'Internship'
+        ELSE 'Mid-Level'
+    END AS seniority_level,
+   
+    CAST(LEFT(date_posted, 10) AS DATE) AS post_date
+FROM raw_jobs
+
+WHERE category IN ('Data and Analytics', 'Software Engineering')
+AND job_title NOT ILIKE '%Meat%' 
+AND job_title NOT ILIKE '%Produce%'
+AND job_title NOT ILIKE '%Retail%';
