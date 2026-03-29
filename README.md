@@ -40,4 +40,4 @@ Enrichment: I performed a LEFT JOIN between the job listings and a custom Salary
 Delivery: The cleaned data was connected to Tableau to create an interactive marketplace report.
 
 📈 Dashboard Preview
-(Tip: Take a high-quality screenshot of your Tableau Dashboard and upload it to your repo, then replace the link below!)
+(https://github.com/TajwarFahmid/texas-tech-market-pipeline/blob/main/Dashboard%201.png)
